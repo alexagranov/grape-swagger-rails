@@ -1,6 +1,11 @@
-### Next
+### 0.1.1 (Next)
 
-* [#6](https://github.com/TinkerDev/grape-swagger-rails/pull/6): Fix: support multiple predefined headers - [@Tyr0](https://github.com/tyr0).
+* [#6](https://github.com/ruby-grape/grape-swagger-rails/pull/6): Fix: support multiple predefined headers - [@Tyr0](https://github.com/tyr0).
+* Upgraded swagger-ui to v2.1.1 - [@dblock](https://github.com/dblock).
+* Grape-swagger 0.7.2 is no longer supported - [@dblock](https://github.com/dblock).
+* Implemented RuboCop, Ruby-style linter - [@dblock](https://github.com/dblock).
+* [#31](https://github.com/ruby-grape/grape-swagger-rails/pull/31): Support Swagger-UI docExpansion option - [@maruware](https://github.com/maruware).
+* [#32](https://github.com/ruby-grape/grape-swagger-rails/pull/32): Fix Ruby 1.9.3 compatibility - [@suan](https://github.com/suan).
 * Your contribution here.
 
 * Added a new :custom_css_file option to have default index.html.erb render a stylesheet link for custom theming - [@alexagranov](https://github.com/alexagranov).
