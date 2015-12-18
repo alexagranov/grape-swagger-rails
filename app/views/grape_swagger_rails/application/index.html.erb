@@ -13,72 +13,75 @@
   <script type="text/javascript">
     $(function () {
         var options = $("html").data('swagger-options');
-        var apiKey = options.headers['X-CSRF-Token'];
-
-    window.swaggerUi = new SwaggerUi({
-      url: options.app_url + options.url,
-      dom_id: "swagger-ui-container",
-      supportHeaderParams: true,
-      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-      onComplete: function(swaggerApi, swaggerUi){
-          if('console' in window) {
-              console.log("Loaded SwaggerUI")
-              console.log(swaggerApi);
-              console.log(swaggerUi);
-          }
-          $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
-
-          // upon loading resources, populate 'api_key' input and disable...
-          if (apiKey) {
-              $("input[name='api_key']").attr('disabled', true);
-              $("input[name='api_key']").val(apiKey);
-          }
-      },
-      onFailure: function(data) {
-        if('console' in window) {
-          console.log("Unable to Load SwaggerUI");
-          console.log(data);
+        var apiKey = null;
+        if ($('#input_apiKey')[0].value) {
+            apiKey = $('#input_apiKey')[0].value;
+        } else if (options.headers['X-CSRF-Token']) {
+            apiKey = options.headers['X-CSRF-Token'];
+            $('#input_apiKey').val(apiKey);
         }
-      },
-      docExpansion: options.doc_expansion,
-      apisSorter: "alpha"
-    });
 
-    function addApiKeyAuthorization() {
-      var key = $('#input_apiKey')[0].value;
+        window.swaggerUi = new SwaggerUi({
+            url: options.app_url + options.url,
+            dom_id: "swagger-ui-container",
+            supportHeaderParams: true,
+            supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+            onComplete: function(swaggerApi, swaggerUi){
+                if('console' in window) {
+                    console.log("Loaded SwaggerUI")
+                    console.log(swaggerApi);
+                    console.log(swaggerUi);
+                }
+                $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
 
-      if(key && key.trim() != "") {
-        if (options.api_auth == 'basic') {
-          key = "Basic " + Base64.encode(key);
-        } else if (options.api_auth == 'bearer') {
-          key = "Bearer " + key
+                // upon loading resources, populate 'api_key' input and disable...
+                if (apiKey) {
+                    $("input[name='api_key']").val(apiKey);
+                }
+            },
+            onFailure: function(data) {
+                if('console' in window) {
+                    console.log("Unable to Load SwaggerUI");
+                    console.log(data);
+                }
+            },
+            docExpansion: options.doc_expansion,
+            apisSorter: "alpha"
+        });
+
+        function addApiKeyAuthorization() {
+            var key = $('#input_apiKey')[0].value;
+
+            if(key && key.trim() != "") {
+                if (options.api_auth == 'basic') {
+                    key = "Basic " + Base64.encode(key);
+                } else if (options.api_auth == 'bearer') {
+                    key = "Bearer " + key
+                }
+                window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization(options.api_key_name, key, options.api_key_type));
+            } else {
+                window.swaggerUi.api.clientAuthorizations.add("key", null);
+            }
         }
-        window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization(options.api_key_name, key, options.api_key_type));
-      } else {
-        window.swaggerUi.api.clientAuthorizations.add("key", null);
-      }
-    }
 
-    $('#input_apiKey').change(function() {
+        $('#input_apiKey').change(function() {
+            var key = $('#input_apiKey')[0].value;
+            addApiKeyAuthorization();
+            // keep resource 'api_key' parameter up to date as well...
+            $("input[name='api_key']").val(key);
+
+            var options = $('html').data('swagger-options');
+            options.headers = {'X-CSRF-Token': key};
+            $('html').data('swagger-options', options);
+            $('html').attr('data-swagger-options', JSON.stringify($("html").data('swagger-options')))
+        });
+
+        window.swaggerUi.load();
+
         addApiKeyAuthorization();
-        // keep resource 'api_key' parameter up to date as well...
-        var key = $('#input_apiKey')[0].value;
-        $("input[name='api_key']").val(key);
+
+        window.swaggerUi.load();
     });
-
-    window.swaggerUi.load();
-
-    <% GrapeSwaggerRails.options.headers.each_with_index do |(key, value), index| %>
-      <%=raw "window.swaggerUi.api.clientAuthorizations.add('header_#{index}', new SwaggerClient.ApiKeyAuthorization('#{CGI.escapeHTML(key)}', '#{CGI.escapeHTML(value)}', 'header'));" %>
-    <% end %>
-
-    if (apiKey) {
-        $('#input_apiKey').val(apiKey);
-    }
-    addApiKeyAuthorization();
-
-    window.swaggerUi.load();
-  });
   </script>
 </head>
 
