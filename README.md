@@ -175,6 +175,18 @@ GrapeSwaggerRails.options.hide_api_key_input = true
 
 By default, these options are false.
 
+### Custom Styles
+
+You can specify a stylesheet file to render with custom themes with:
+
+```ruby
+GrapeSwaggerRails.options.custom_css_file = 'swagger_custom.css'
+```
+
+This is rendered with `stylesheet_link_tag` so if you are using SASS or the Asset pipeline everything should work fine.
+
+If you are using the Asset pipeline, don't forget to add your `custom_css_file` to `Rails.application.config.assets.precompile`.
+
 ### Updating Swagger UI from Dist
 
 To update Swagger UI from its [distribution](https://github.com/wordnik/swagger-ui), run `bundle exec rake swagger_ui:dist:update`. Examine the changes carefully.

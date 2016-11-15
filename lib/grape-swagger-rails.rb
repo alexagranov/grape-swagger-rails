@@ -32,6 +32,7 @@ module GrapeSwaggerRails
     api_key_type:           'query', # 'header'
     api_key_default_value:  '', # Auto populates api_key
 
+    custom_css_file:         nil, # 'path_to_custom_css' - will be rendered with stylesheet_link_tag
     doc_expansion:          'none',
     supported_submit_methods: %w(get post put delete patch),
 
