@@ -39,7 +39,6 @@
 
                     // upon loading resources, populate 'api_key' input and disable...
                     if (apiKey) {
-                        $("input[name='Authorization']").attr('disabled', true);
                         $("input[name='Authorization']").val('Token ' + apiKey);
                     }
                     addApiKeyAuthorization();
